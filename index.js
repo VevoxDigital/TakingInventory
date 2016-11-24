@@ -4,7 +4,8 @@ const electron 	= require('electron'),
 			path			= require('path'),
 			app 			= electron.app;
 
-const launcher = require('./src');
+const launcher 	= require('./src'),
+			pkg				= require('./package.json');
 
 // adds debug features like hotkeys for triggering dev tools and reload
 require('electron-debug')();
@@ -23,6 +24,7 @@ function createMainWindow() {
 
 app.__rootdir = __dirname;
 app.__dir = path.join(__dirname, 'src');
+app.package = pkg;
 
 app.on('window-all-closed', () => { if (process.platform !== 'darwin') app.quit(); });
 

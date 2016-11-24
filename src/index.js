@@ -14,7 +14,7 @@ exports.init = a => {
     resizable: false,
     fullscreenable: false,
     maximizeable: false,
-    title: 'Taking Inventory' // TODO Set window title with version
+    title: 'Taking Inventory v' + app.package.version
   });
 
   win.loadURL(`file://${app.__rootdir}/index.html`);
