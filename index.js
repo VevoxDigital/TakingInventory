@@ -1,19 +1,13 @@
 'use strict';
-const electron = require('electron');
 
-const app = electron.app;
+const electron 	= require('electron'),
+			path			= require('path'),
+			app 			= electron.app;
+
+const launcher = require('./src');
 
 // adds debug features like hotkeys for triggering dev tools and reload
 require('electron-debug')();
-
-// prevent window being garbage collected
-let mainWindow;
-
-function onClosed() {
-	// dereference the window
-	// for multiple windows store them in an array
-	mainWindow = null;
-}
 
 function createMainWindow() {
 	const win = new electron.BrowserWindow({
@@ -27,18 +21,16 @@ function createMainWindow() {
 	return win;
 }
 
-app.on('window-all-closed', () => {
-	if (process.platform !== 'darwin') {
-		app.quit();
-	}
-});
+app.__rootdir = __dirname;
+app.__dir = path.join(__dirname, 'src');
 
-app.on('activate', () => {
-	if (!mainWindow) {
-		mainWindow = createMainWindow();
-	}
-});
+app.on('window-all-closed', () => { if (process.platform !== 'darwin') app.quit(); });
 
-app.on('ready', () => {
-	mainWindow = createMainWindow();
-});
+let createWindow = () => {
+	if (!app.window) {
+		app.window = launcher.init(app);
+		app.window.on('closed', launcher.close);
+	}
+};
+app.on('activate', () => { createWindow(); });
+app.on('ready', () => { createWindow(); launcher.open(); });
