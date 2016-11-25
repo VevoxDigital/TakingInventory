@@ -44,6 +44,11 @@ exports = module.exports = grunt => {
           ext: '.css'
         }]
       }
+    },
+
+    // clean out the dist directory
+    clean: {
+      dist: [ 'dist/' ]
     }
 
   });
@@ -51,8 +56,9 @@ exports = module.exports = grunt => {
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-pug');
   grunt.loadNpmTasks('grunt-contrib-sass');
+  grunt.loadNpmTasks('grunt-contrib-clean');
 
   grunt.registerTask('default', [ 'dist' ]);
-  grunt.registerTask('dist', [ 'copy:dist', 'pug:dist', 'sass:dist' ]);
+  grunt.registerTask('dist', [ 'clean:dist', 'copy:dist', 'pug:dist', 'sass:dist' ]);
 
 };
