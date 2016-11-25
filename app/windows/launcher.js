@@ -13,8 +13,7 @@ exports = module.exports = class LauncherWindow extends BrowserWindow {
       resizable: false,
       fullscreenable: false,
       maximizeable: false,
-      title: `Taking Inventory v${app.pkg.version}`,
-      backgroundColor: '#333'
+      title: `Taking Inventory v${app.pkg.version}`
     });
 
     let self = this;
