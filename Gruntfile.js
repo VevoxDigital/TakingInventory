@@ -19,6 +19,7 @@ exports = module.exports = grunt => {
       dist: {
         options: {
           data: {
+            name: '<%= pkg.productName %>',
             version: '<%= pkg.version %>'
           }
         },
