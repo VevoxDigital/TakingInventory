@@ -26,14 +26,32 @@ exports = module.exports = grunt => {
           'dist/launcher.html': 'views/launcher.pug'
         }
       }
+    },
+
+    // compile sass stylesheets
+    sass: {
+      dist: {
+        options: {
+          style: 'compressed',
+          loadPath: [ 'node_modules', 'styles/partials' ]
+        },
+        files: [{
+          expand: true,
+          cwd: 'styles',
+          src: '*.scss',
+          dest: 'dist/',
+          ext: '.css'
+        }]
+      }
     }
 
   });
 
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-pug');
+  grunt.loadNpmTasks('grunt-contrib-sass');
 
   grunt.registerTask('default', [ 'dist' ]);
-  grunt.registerTask('dist', [ 'copy:dist', 'pug:dist' ]);
+  grunt.registerTask('dist', [ 'copy:dist', 'pug:dist', 'sass:dist' ]);
 
 };
