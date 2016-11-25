@@ -59,6 +59,7 @@ exports = module.exports = grunt => {
   grunt.loadNpmTasks('grunt-contrib-clean');
 
   grunt.registerTask('default', [ 'dist' ]);
-  grunt.registerTask('dist', [ 'clean:dist', 'copy:dist', 'pug:dist', 'sass:dist' ]);
+  grunt.registerTask('clean', [ 'clean:dist' ]);
+  grunt.registerTask('dist', [ 'clean', 'copy:dist', 'pug:dist', 'sass:dist' ]);
 
 };
