@@ -27,7 +27,8 @@ exports = module.exports = grunt => {
           }
         },
         files: {
-          'dist/launcher.html': 'views/launcher.pug'
+          'dist/launcher.html': 'views/launcher.pug',
+          'dist/console.html': 'views/console.pug'
         }
       }
     },

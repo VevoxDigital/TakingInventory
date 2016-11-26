@@ -13,7 +13,8 @@ exports = module.exports = class LauncherWindow extends BrowserWindow {
       resizable: false,
       fullscreenable: false,
       maximizeable: false,
-      title: `Taking Inventory v${app.pkg.version}`
+      show: false,
+      title: 'Taking Inventory'
     });
 
     let self = this;
@@ -21,8 +22,13 @@ exports = module.exports = class LauncherWindow extends BrowserWindow {
 
     self.loadURL('file://' + path.join(app.cwd, 'launcher.html'));
 
-    self.once('ready-to-show', () => { self.show(); });
+    self.once('ready-to-show', () => {
+      self.show();
+      app.logger.info('launcher ready');
+    });
     self.once('close', () => { app.quit(); });
+
+    self.logger = app.logger;
   }
 
 };

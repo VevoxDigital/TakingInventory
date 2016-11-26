@@ -1,6 +1,6 @@
 'use strict';
 
-exports = class EventEmitter {
+window.EventEmitter = class EventEmitter {
   constructor() {
     this.listeners = new Map();
   }

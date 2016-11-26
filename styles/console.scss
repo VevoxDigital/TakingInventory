@@ -1,0 +1,74 @@
+// Colors & Fonts
+@import 'colors';
+@import 'fonts';
+
+// Styles
+* { box-sizing: border-box; }
+
+html, body {
+  overflow: hidden;
+  padding: 0;
+  margin: 0;
+}
+
+#tabs {
+  height: 40px;
+  width: 100%;
+  .console-tab {
+    height: 100%;
+    padding: 0 5px;
+    margin: 0;
+    color: $color-dark-fg + #111;
+    border: none;
+    background: none;
+    vertical-align: center;
+    outline: none;
+    transition: background 250ms;
+    &:hover {
+      cursor: pointer;
+      background-color: $color-dark-bg - #111;
+    }
+    &.active {
+      border-bottom: 5px ($color-dark-bg + #222) solid;
+      &:hover {
+        cursor: default;
+        background-color: transparent;
+      }
+    }
+  }
+}
+#console {
+  width: 100%;
+  height: calc(100vh - 40px);
+  overflow-y: scroll;
+  background-color: $color-light-bg;
+  .console-window {
+    width: 100%;
+    table {
+      width: 100%;
+      font-family: monospace;
+      color: $color-light-fg;
+      border: none;
+      border-collapse: collapse;
+      tr.level-warn { color: #E67E22; }
+      tr.level-error { color: #E74C3C; }
+      td {
+        vertical-align: top;
+        border: none;
+        padding: 2px 4px;
+        margin: 0;
+        outline: none;
+        &.col-time {
+          width: 30px;
+          opacity: 0.75;
+        }
+        &.col-level {
+          width: 20px;
+          font-weight: bold;
+        }
+      }
+
+    }
+  }
+
+}

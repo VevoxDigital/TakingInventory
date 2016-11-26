@@ -3,8 +3,6 @@
 const {remote} = require('electron');
 window.$ = window.jQuery = require('jquery');
 
-const EventEmitter = require('./events');
-
 class Launcher extends EventEmitter {
 
   launch() {
@@ -38,12 +36,16 @@ $(() => {
     let button = $('#launch'),
       primary = button.find('.primary'),
       secondary = button.find('.secondary');
+
+
     if (profile) {
+      remote.getCurrentWindow().logger.info('switched to profile: ' + profile.name);
       primary.html('Launch Minecraft');
       secondary.html(profile.name + ' - ' + profile.version);
       button.attr('title', 'Ready to Launch Minecraft ' + profile.version);
       button.removeAttr('disabled');
     } else {
+      remote.getCurrentWindow().logger.info('switched to no profile');
       primary.html('Please Wait');
       secondary.html('Loading profile manifest, just a moment...');
       button.attr('title', 'Loading...');
