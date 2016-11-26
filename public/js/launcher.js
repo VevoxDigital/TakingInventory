@@ -12,4 +12,8 @@ $(() => {
     remote.getCurrentWindow().minimize();
   });
 
+  setTimeout(() => {
+    $('#launch').removeAttr('disabled');
+  }, 1000);
+
 });
