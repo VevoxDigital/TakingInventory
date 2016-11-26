@@ -30,7 +30,8 @@
       cursor: pointer;
     }
     &[disabled] {
-      background-color: $color-light-bg - #111;
+      background-color: $color-light-bg - #333;
+      &:hover { cursor: default; }
     }
   }
 }
