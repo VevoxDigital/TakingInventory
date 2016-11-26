@@ -11,6 +11,7 @@
     "url": "github.com/VevoxDigital/TakingInventory"
   },
   "scripts": {
+    "install": "grunt downloadfile",
     "test": "xo",
     "start": "grunt && electron ./dist",
     "build": "grunt && electron-packager ./dist --out=dist --asar --overwrite --all"
@@ -36,6 +37,7 @@
     "grunt-contrib-copy": "^1.0.0",
     "grunt-contrib-pug": "^1.0.0",
     "grunt-contrib-sass": "^1.0.0",
+    "grunt-downloadfile": "^0.3.2",
     "xo": "^0.16.0"
   },
   "xo": {

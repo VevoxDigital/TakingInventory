@@ -9,7 +9,9 @@ exports = module.exports = grunt => {
     copy: {
       dist: {
         files: [
-          { expand: true, cwd: 'app/', src: [ '**' ], dest: 'dist/' }
+          { expand: true, cwd: 'app/', src: [ '**' ], dest: 'dist/' },
+          { expand: true, cwd: 'public/', src: [ '**' ], dest: 'dist/' },
+          { expand: true, cwd: '.tmp', src: '**/fontawesome*', dest: 'dist/' }
         ]
       }
     },
@@ -40,15 +42,26 @@ exports = module.exports = grunt => {
           expand: true,
           cwd: 'styles',
           src: '*.scss',
-          dest: 'dist/',
+          dest: 'dist/styles',
           ext: '.css'
         }]
       }
     },
 
+    // download distribution files
+    downloadfile: {
+      files: [
+        { url: 'https://cdn.rawgit.com/FortAwesome/Font-Awesome/master/css/font-awesome.min.css', dest: '.tmp/styles', name: 'fontawesome.css' },
+        { url: 'https://cdn.rawgit.com/FortAwesome/Font-Awesome/master/fonts/fontawesome-webfont.ttf', dest: '.tmp/fonts' },
+        { url: 'https://cdn.rawgit.com/FortAwesome/Font-Awesome/master/fonts/fontawesome-webfont.woff', dest: '.tmp/fonts' },
+        { url: 'https://cdn.rawgit.com/FortAwesome/Font-Awesome/master/fonts/fontawesome-webfont.woff2', dest: '.tmp/fonts' },
+        { url: 'https://cdn.rawgit.com/FortAwesome/Font-Awesome/master/fonts/fontawesome-webfont.svg', dest: '.tmp/fonts' }
+      ]
+    },
+
     // clean out the dist directory
     clean: {
-      dist: [ 'dist/' ]
+      dist: [ 'dist' ]
     }
 
   });
@@ -57,9 +70,9 @@ exports = module.exports = grunt => {
   grunt.loadNpmTasks('grunt-contrib-pug');
   grunt.loadNpmTasks('grunt-contrib-sass');
   grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks('grunt-downloadfile');
 
   grunt.registerTask('default', [ 'dist' ]);
-  grunt.registerTask('clean', [ 'clean:dist' ]);
-  grunt.registerTask('dist', [ 'clean', 'copy:dist', 'pug:dist', 'sass:dist' ]);
+  grunt.registerTask('dist', [ 'clean:dist', 'copy:dist', 'pug:dist', 'sass:dist' ]);
 
 };
