@@ -1,7 +1,13 @@
+// Colors & Fonts
 @import 'colors';
+@import 'fonts';
+
+// Partials
 @import 'frame';
 @import 'footer';
 
+// Styles
+* { box-sizing: border-box; }
 html, body {
   padding: 0;
   margin: 0;

@@ -11,7 +11,8 @@ exports = module.exports = grunt => {
         files: [
           { expand: true, cwd: 'app/', src: [ '**' ], dest: 'dist/' },
           { expand: true, cwd: 'public/', src: [ '**' ], dest: 'dist/' },
-          { expand: true, cwd: '.tmp', src: '**/fontawesome*', dest: 'dist/' }
+          { expand: true, cwd: '.tmp', src: '**/fontawesome*', dest: 'dist/' },
+          { expand: true, cwd: 'node_modules/jquery/dist', src: 'jquery.min.js', dest: 'dist/js' }
         ]
       }
     },

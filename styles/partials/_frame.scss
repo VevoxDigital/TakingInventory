@@ -2,4 +2,68 @@
   width: 100%;
   background-color: $color-dark-bg;
   height: 30px;
+  font-family: 'Roboto', sans-serif;
+  -webkit-app-region: drag;
+  a {
+    text-decoration: none;
+    color: inherit;
+    transition: opacity 250ms;
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+  .title {
+    float: left;
+    color: $color-dark-fg;
+    vertical-align: middle;
+    position: relative;
+    height: 100%;
+    &::before {
+      content: '';
+      height: 100%;
+      display: inline-block;
+      vertical-align: middle;
+    }
+    a {
+      display: inline-block;
+      vertical-align: middle;
+      font-size: 11pt;
+      font-weight: light;
+      text-align: center;
+      padding: 0 10px;
+      height: 100%;
+      padding-top: 8px;
+      -webkit-app-region: no-drag;
+      transition: background-color 250ms;
+      &:hover {
+        background-color: $color-dark-bg - #111;
+      }
+    }
+    p {
+      display: inline-block;
+      margin: 0;
+      padding: 0 3px;
+      margin-top: -2px;
+      font-size: 11pt;
+      vertical-align: middle;
+      -webkit-user-select: none;
+    }
+  }
+  .window {
+    float: right;
+    color: $color-dark-fg;
+    position: relative;
+    height: 100%;
+    -webkit-app-region: no-drag;
+    a {
+      font-size: 14pt;
+      display: inline-block;
+      padding: 5px 5px 0 5px;
+      height: 100%;
+      vertical-align: middle;
+      &.fa-minus {
+        padding-top: 9px;
+      }
+    }
+  }
 }

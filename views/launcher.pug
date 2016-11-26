@@ -4,8 +4,13 @@ html
     meta(charset='utf8')
     title #{name} v#{version}
 
-    link(rel='stylesheet' type='text/css' href='launcher.css')
+    link(rel='stylesheet' type='text/css' href='styles/launcher.css')
+    link(rel='stylesheet' type='text/css' href='styles/fontawesome.css')
+    
+    script(src='js/launcher.js')
   body
     include includes/frame.pug
     section#content
     include includes/footer.pug
+    
+    
