@@ -6,9 +6,12 @@ const {
   LauncherConsoleWindow,
   SplashScreen }  = require('./windows');
 const path    = require('path'),
-      winston = require('winston');
+      winston = require('winston'),
+      os      = require('os');
 
 const pkg = require(path.join(__dirname, '..', 'package.json'));
+
+let splash, launcher, launcherConsole;
 
 app.cwd = __dirname;
 app.pkg = pkg;
@@ -27,15 +30,53 @@ app.logger = new winston.Logger({
   ]
 });
 
+app.createCrashDump = (error, extra) => {
+  if (!error) return;
+  app.logger.error('a fatal error has been encountered during runtime');
+  app.logger.error('please report this error to the developers on GitHub');
+
+  let dump = 'Crash Report:<pre>';
+
+  dump += 'System: ' + os.platform() + ' ' + os.arch() + ' ' + os.release() + '\n';
+  dump += 'CPUs:';
+  os.cpus().forEach(cpu => {
+    dump += `\n    ${cpu.model} - ${cpu.speed}MHz`
+  });
+
+  if (extra) {
+    dump += 'Extra Information:\n'
+    for (const key in extra) {
+      if (!extra.hasOwnProperty(key)) continue;
+      dump += '    ' + key + ': ' + extra[key].toString();
+    }
+  }
+
+  dump += '\nCallstack:\n  ' + error.stack.replace(/\(.+TakingInventory/g, '(.') + '</pre>';
+  app.logger.error(dump);
+
+  launcherConsole.show();
+  splash.hide();
+  launcher.hide();
+  launcherConsole.on('close', () => {
+    app.quit();
+  });
+};
+
 app.once('window-all-closed', () => {
   app.logger.info('triggered window-all-closed');
   if (process.platform !== 'darwin') app.quit();
 });
 
-let splash, launcher, launcherConsole;
-
 app.once('ready', () => {
   app.logger.info('app ready, launcher init start');
+
+  process.on('uncaughtException', err => {
+    app.createCrashDump(err);
+  });
+  process.on('SIGINT', () => {
+    app.logger.info('recieved SIGINT');
+    app.quit();
+  });
 
   // pop up the splashscreen asap so the user has something to see
   splash = new SplashScreen();
