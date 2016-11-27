@@ -26,10 +26,9 @@ exports = module.exports = grunt => {
             version: '<%= pkg.version %>'
           }
         },
-        files: {
-          'dist/launcher.html': 'views/launcher.pug',
-          'dist/console.html': 'views/console.pug'
-        }
+        files: [
+          { expand: true, cwd: 'views/', src: '*.pug', dest: 'dist/', ext: '.html' }
+        ]
       }
     },
 
