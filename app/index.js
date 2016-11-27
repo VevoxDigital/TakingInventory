@@ -1,7 +1,10 @@
 'use strict';
 
 const {app}             = require('electron');
-const {LauncherWindow,LauncherConsoleWindow}  = require('./windows');
+const {
+  LauncherWindow,
+  LauncherConsoleWindow,
+  SplashScreen }  = require('./windows');
 const path    = require('path'),
       winston = require('winston');
 
@@ -29,17 +32,24 @@ app.once('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit();
 });
 
-let launcher, launcherConsole;
+let splash, launcher, launcherConsole;
 
 app.once('ready', () => {
   app.logger.info('app ready, launcher init start');
+
+  // pop up the splashscreen asap so the user has something to see
+  splash = new SplashScreen();
 
   // start the console first
   launcherConsole = new LauncherConsoleWindow();
   app.logger.transports.launcher.window = launcherConsole;
 
   launcherConsole.once('show', () => {
+
     // start running the actual app
     launcher = new LauncherWindow();
+    launcher.once('show', () => {
+      splash.close();
+    });
   });
 });
