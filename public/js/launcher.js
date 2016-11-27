@@ -52,7 +52,7 @@ $(() => {
       button.attr('disabled', '');
     }
   }
-  updateLaunchButton();
+  remote.getCurrentWindow().on('show', updateLaunchButton);
 
   launcher = new Launcher();
   launcher.on('profileChanged', profile => {
