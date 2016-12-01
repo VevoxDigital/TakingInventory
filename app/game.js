@@ -83,15 +83,16 @@ exports.LauncherConfig = class LauncherConfig {
     return deferred.promise;
   }
 
-  constructor(data) {
+  constructor(data) { // eslint-disable-line
     this.profiles = { };
     if (typeof data === 'object') {
       let ps = data.profiles || { };
       for (const p in ps) if (ps.hasOwnProperty(p))
         this.profiles[p] = new exports.Profile(ps[p]);
-      this.profile = data.profile;
+      this.profile = data.profile || Object.keys(this.profiles)[0];
     } else if (typeof data === 'string') {
       this.profiles[data] = new exports.Profile(data);
+      this.profile = data;
     } else throw new Error('unknown data input');
   }
 
@@ -117,7 +118,7 @@ exports.LauncherConfig = class LauncherConfig {
       ps[p] = this.profiles[p].serialize();
     return {
       profiles: ps,
-      profile: this.profile,
+      profile: this.profile.name,
       format: this.format
     };
   }
@@ -126,7 +127,7 @@ exports.LauncherConfig = class LauncherConfig {
     let deferred = q.defer(),
         self = this;
 
-    fs.writeFile(path.join(exports.dir(), FILE_PROFILES), JSON.stringify(self.serialize(), null, '\t'), err => {
+    fs.writeFile(path.join(exports.dir(), FILE_PROFILES), JSON.stringify(self.serialize(), null, 2), err => {
       if (err) return deferred.reject(err);
       deferred.resolve();
     });
