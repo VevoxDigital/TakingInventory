@@ -29,26 +29,26 @@ exports.Profile = class Profile {
   constructor(data) {
     if (typeof data === 'string') {
       this.name = data;
-    } else if (typeof json === 'object') {
-      if (!json.name) throw new Error('name property missing');
-      this.name = json.name;
-      this.version = json.version;
-      this.java = json.java;
-      this.resolution = json.resolution;
-      this.visibility = json.visibility;
-      this.game = json.game;
+    } else if (typeof data === 'object') {
+      if (!data.name) throw new Error('name property missing');
+      this.name = data.name;
+      this.version = data.version;
+      this.java = data.java;
+      this.resolution = data.resolution;
+      this.visibility = data.visibility;
+      this.game = data.game;
     } else throw new Error('unknown constructor data');
   }
 
   serialize() {
-    return JSON.stringify({
+    return {
       name: this.name,
       version: this.version,
       java: this.java,
       resolution: this.resolution,
       visiblity: this.visiblity,
       game: this.game
-    })
+    };
   }
 };
 
@@ -111,22 +111,22 @@ exports.LauncherConfig = class LauncherConfig {
     return Object.keys(this.profiles).length;
   }
 
-  serialize() {
+  serialize(spaces) {
     let ps = { };
     for (const p in this.profiles) if (this.profiles.hasOwnProperty(p))
       ps[p] = this.profiles[p].serialize();
-    return JSON.stringify({
+    return {
       profiles: ps,
       profile: this.profile,
       format: this.format
-    });
+    };
   }
 
   save() {
     let deferred = q.defer(),
         self = this;
 
-    fs.writeFile(path.join(exports.dir(), FILE_PROFILES), self.serialize(), err => {
+    fs.writeFile(path.join(exports.dir(), FILE_PROFILES), JSON.stringify(self.serialize(), null, '\t'), err => {
       if (err) return deferred.reject(err);
       deferred.resolve();
     });

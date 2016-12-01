@@ -28,7 +28,7 @@ exports = module.exports = class LauncherWindow extends BrowserWindow {
 
     self.once('ready-to-show', () => {
       this.buildConfig().then(config => {
-        app.logger.info(`launcher ready, loaded ${config.numProfiles} profiles [format ${config.format}]`);
+        app.logger.info(`launcher ready, loaded ${config.numProfiles} profile(s) [format ${config.format}]`);
         this.show();
       }).fail((err) => {
         app.logger.error('the launcher could not be initialized');
@@ -46,6 +46,7 @@ exports = module.exports = class LauncherWindow extends BrowserWindow {
 
       game.versions().then(versions => {
         config.versions = versions;
+        config.save();
         deferred.resolve(config);
       });
 
