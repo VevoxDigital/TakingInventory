@@ -26,13 +26,14 @@ exports.Profile = class Profile {
     return new this(JSON.parse(input));
   }
 
-  constructor(data) {
+  constructor(config, data) {
+    this.config = config;
     if (typeof data === 'string') {
       this.name = data;
     } else if (typeof data === 'object') {
       if (!data.name) throw new Error('name property missing');
       this.name = data.name;
-      this.version = data.version;
+      this.$version = data.version;
       this.java = data.java;
       this.resolution = data.resolution;
       this.visibility = data.visibility;
@@ -40,10 +41,19 @@ exports.Profile = class Profile {
     } else throw new Error('unknown constructor data');
   }
 
+  get version() {
+    if (!this.config.versions) return { };
+    let ver = this.$version || exports.VersionType.RELEASE;
+    return (this.config.versions.latest[ver]
+      ? this.config.versions.versions[this.config.versions.latest[ver]]
+      : this.config.versions.versions[ver]) || { };
+
+  }
+
   serialize() {
     return {
       name: this.name,
-      version: this.version,
+      version: this.$version,
       java: this.java,
       resolution: this.resolution,
       visiblity: this.visiblity,
@@ -85,13 +95,14 @@ exports.LauncherConfig = class LauncherConfig {
 
   constructor(data) { // eslint-disable-line
     this.profiles = { };
+    this.versions = null;
     if (typeof data === 'object') {
       let ps = data.profiles || { };
       for (const p in ps) if (ps.hasOwnProperty(p))
-        this.profiles[p] = new exports.Profile(ps[p]);
+        this.profiles[p] = new exports.Profile(this, ps[p]);
       this.profile = data.profile || Object.keys(this.profiles)[0];
     } else if (typeof data === 'string') {
-      this.profiles[data] = new exports.Profile(data);
+      this.profiles[data] = new exports.Profile(this, data);
       this.profile = data;
     } else throw new Error('unknown data input');
   }
@@ -109,7 +120,10 @@ exports.LauncherConfig = class LauncherConfig {
   }
 
   get numProfiles() {
-    return Object.keys(this.profiles).length;
+    return this.profileNames.length;
+  }
+  get profileNames() {
+    return Object.keys(this.profiles);
   }
 
   serialize(spaces) {
@@ -140,8 +154,8 @@ exports.LauncherConfig = class LauncherConfig {
 exports.VersionType = {
   RELEASE:  'release',
   SNAPSHOT: 'snapshot',
-  ALPHA:    'alpha',
-  BETA:     'beta',
+  ALPHA:    'old_alpha',
+  BETA:     'old_beta',
   CUSTOM:   'custom'
 };
 exports.VersionEntry = class VersionEntry {
@@ -179,12 +193,6 @@ exports.VersionEntry = class VersionEntry {
       url: this.url
     };
   }
-
-  // disable setters, as all are constant
-  set id(id) { }
-  set type(type) { }
-  set url(url) { }
-
 };
 
 

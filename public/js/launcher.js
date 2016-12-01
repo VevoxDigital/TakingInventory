@@ -21,38 +21,59 @@ class Launcher extends EventEmitter {
 
 }
 
-let launcher;
+let win = remote.getCurrentWindow(), launcher;
+
+win.on('show', () => {
+  win.config.profileNames.forEach(name => {
+    $('#profile').append(`<option value="${name}">${name}</option>`);
+  });
+  $('#profile').change(() => {
+    win.config.profile = $('#profile').val();
+    launcher.emit('profileChanged', win.config.profile);
+  });
+  $('#profile').val(win.config.profile.name);
+  launcher.emit('profileChanged', win.config.profile);
+});
 
 $(() => {
 
   $('#windowClose').click(() => {
-    remote.getCurrentWindow().close();
+    win.close();
   });
   $('#windowMinimize').click(() => {
-    remote.getCurrentWindow().minimize();
+    win.minimize();
   });
+
+  function getFriendlyVersionName(vername) {
+    if (vername.startsWith('b')) vername = 'Beta ' + vername.substring(1);
+    else if (vername.startsWith('a')) vername = 'Alpha ' + vername.substring(1);
+    else if (vername.startsWith('inf')) vername = 'InfDev';
+    else if (vername.startsWith('c')) vername = 'Classic ' + vername.substring(1);
+    else if (vername.startsWith('rd')) vername = 'Indev ' + vername.substring(3);
+    return vername;
+  }
 
   function updateLaunchButton(profile) {
     let button = $('#launch'),
       primary = button.find('.primary'),
       secondary = button.find('.secondary');
 
+    let vername = getFriendlyVersionName(profile.version.id);
 
     if (profile) {
-      remote.getCurrentWindow().logger.info('switched to profile: ' + profile.name);
+      win.logger.info('switched to profile: ' + profile.name);
       primary.html('Launch Minecraft');
-      secondary.html(profile.name + ' - ' + profile.version);
-      button.attr('title', 'Ready to Launch Minecraft ' + profile.version);
+      secondary.html(profile.name + ' - ' + vername);
+      button.attr('title', 'Ready to Launch Minecraft ' + vername);
       button.removeAttr('disabled');
     } else {
-      remote.getCurrentWindow().logger.info('switched to no profile');
+      win.logger.info('switched to no profile');
       primary.html('Please Wait');
       secondary.html('Loading profile manifest, just a moment...');
       button.attr('title', 'Loading...');
       button.attr('disabled', '');
     }
   }
-  remote.getCurrentWindow().on('show', updateLaunchButton);
 
   launcher = new Launcher();
   launcher.on('profileChanged', profile => {
