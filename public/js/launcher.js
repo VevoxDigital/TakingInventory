@@ -2,6 +2,7 @@
 
 const {remote} = require('electron');
 window.$ = window.jQuery = require('jquery');
+require('velocity-animate');
 
 class Launcher extends EventEmitter {
 
@@ -44,6 +45,27 @@ $(() => {
     win.minimize();
   });
 
+  let modal = $('#modal');
+  function toggleModal() {
+    const dur = 200;
+    if (modal.is(':visible')) {
+      modal.velocity({
+        opacity: 0
+      }, { display: 'none', duration: dur });
+    } else {
+      modal.velocity({
+         opacity: 1
+      }, { display: 'block', duration: dur });
+    }
+  }
+  function setModalContent(contentID) {
+    modal.find('#modalForeground > .content').children().hide();
+    modal.find('#modalForeground > .content > #' + contentID).show();
+  }
+  modal.find('#modalForeground > .close').click(() => {
+    toggleModal();
+  });
+
   function getFriendlyVersionName(vername) {
     if (vername.startsWith('b')) vername = 'Beta ' + vername.substring(1);
     else if (vername.startsWith('a')) vername = 'Alpha ' + vername.substring(1);
@@ -83,6 +105,10 @@ $(() => {
   // TODO DEBUG Just tied the menu button to a mock profile for testing.
   $('#windowOptions').click(() => {
     launcher.activeProfile = launcher.activeProfile ? null : { name: 'Latest Official', version: '1.10.2' };
+  });
+  $('#footer .fa.fa-cog').click(() => {
+    setModalContent('profiles');
+    toggleModal();
   });
 
 });
