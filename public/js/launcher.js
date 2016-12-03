@@ -53,24 +53,23 @@ $(() => {
         opacity: 0
       }, { display: 'none', duration: dur });
       modal.find('#modalForeground').velocity({
-        'max-width': 0,
-        'max-height': 0,
-        'min-width': 0,
-        'min-height': 0
-      }, { duration: dur });
+        width: '50%',
+        height: '60%'
+      }, { duration: dur, easing: 'ease-out' });
     } else {
       modal.velocity({
          opacity: 1
       }, { display: 'block', duration: dur });
       modal.find('#modalForeground').velocity({
-        'max-width': '70%',
-        'max-height': '80%',
-        'min-width': '300px',
-        'min-height': '150px'
-      }, { duration: dur * 2, easing: 'spring' });
+        width: '70%',
+        height: '80%'
+      }, { duration: dur / 2, easing: 'spring' });
     }
   }
+  let modalMenu = modal.find('#modalMenu');
   function setModalContent(contentID) {
+    modalMenu.children().removeClass('active');
+    modalMenu.find('[data-menu="' + contentID + '"]').addClass('active');
     modal.find('#modalForeground > .content').children().hide();
     modal.find('#modalForeground > .content > #' + contentID).show();
   }
@@ -79,6 +78,9 @@ $(() => {
   });
   modal.find('#modalBackground').click(() => {
     toggleModal();
+  });
+  modalMenu.find('li.menu-item').click(function () {
+    setModalContent($(this).attr('data-menu'));
   });
 
   function getFriendlyVersionName(vername) {
@@ -119,11 +121,12 @@ $(() => {
 
   // TODO DEBUG Just tied the menu button to a mock profile for testing.
   $('#windowOptions').click(() => {
-    launcher.activeProfile = launcher.activeProfile ? null : { name: 'Latest Official', version: '1.10.2' };
+    toggleModal();
+    setModalContent('menuLauncher');
   });
   $('#footer .fa.fa-cog').click(() => {
-    setModalContent('profiles');
     toggleModal();
+    setModalContent('menuProfile');
   });
 
 });

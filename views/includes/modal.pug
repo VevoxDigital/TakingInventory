@@ -1,6 +1,17 @@
-div#modal
+div#modal(style="display:none")
   div#modalBackground
-  div#modalForeground
+  div#modalForeground(style="width:50%;height:60%")
     a.close.fa.fa-close(href="javascript:")
+    ul.menu#modalMenu
+      li.menu-header Settings
+      li.menu-item(data-menu="menuLauncher") Launcher
+      li.menu-item(data-menu="menuUser") Users
+      li.menu-item(data-menu="menuProfile") Profiles
+      li.menu-item(data-menu="menuMods") Mods
+      
+      li.menu-hr
+      li.menu-item.menu-item-sm(data-menu="menuChangelog") Changelog
+      li.menu-item.menu-item-sm(data-menu="menuAbout") About
     div.content
+      include modals/profile.pug
       
