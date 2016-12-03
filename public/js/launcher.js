@@ -52,10 +52,22 @@ $(() => {
       modal.velocity({
         opacity: 0
       }, { display: 'none', duration: dur });
+      modal.find('#modalForeground').velocity({
+        'max-width': 0,
+        'max-height': 0,
+        'min-width': 0,
+        'min-height': 0
+      }, { duration: dur });
     } else {
       modal.velocity({
          opacity: 1
       }, { display: 'block', duration: dur });
+      modal.find('#modalForeground').velocity({
+        'max-width': '70%',
+        'max-height': '80%',
+        'min-width': '300px',
+        'min-height': '150px'
+      }, { duration: dur * 2, easing: 'spring' });
     }
   }
   function setModalContent(contentID) {
@@ -63,6 +75,9 @@ $(() => {
     modal.find('#modalForeground > .content > #' + contentID).show();
   }
   modal.find('#modalForeground > .close').click(() => {
+    toggleModal();
+  });
+  modal.find('#modalBackground').click(() => {
     toggleModal();
   });
 
