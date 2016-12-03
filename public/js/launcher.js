@@ -25,6 +25,7 @@ class Launcher extends EventEmitter {
 let win = remote.getCurrentWindow(), launcher;
 
 win.on('show', () => {
+  // populate profiles list and register change events
   win.config.profileNames.forEach(name => {
     $('#profile').append(`<option value="${name}">${name}</option>`);
   });
@@ -38,6 +39,7 @@ win.on('show', () => {
 
 $(() => {
 
+  // bind close/minimize buttons
   $('#windowClose').click(() => {
     win.close();
   });
@@ -45,6 +47,7 @@ $(() => {
     win.minimize();
   });
 
+  // setup modal functions
   let modal = $('#modal');
   function toggleModal() {
     const dur = 200;
@@ -83,6 +86,7 @@ $(() => {
     setModalContent($(this).attr('data-menu'));
   });
 
+  // helper function to get a more "friendly" version name
   function getFriendlyVersionName(vername) {
     if (vername.startsWith('b')) vername = 'Beta ' + vername.substring(1);
     else if (vername.startsWith('a')) vername = 'Alpha ' + vername.substring(1);
@@ -92,6 +96,7 @@ $(() => {
     return vername;
   }
 
+  // launch button updater and bindings
   function updateLaunchButton(profile) {
     let button = $('#launch'),
       primary = button.find('.primary'),
@@ -113,13 +118,12 @@ $(() => {
       button.attr('disabled', '');
     }
   }
-
   launcher = new Launcher();
   launcher.on('profileChanged', profile => {
     updateLaunchButton(profile);
   });
 
-  // TODO DEBUG Just tied the menu button to a mock profile for testing.
+  // footer and frame button bindings
   $('#windowOptions').click(() => {
     toggleModal();
     setModalContent('menuLauncher');
