@@ -1,7 +1,6 @@
 div#modal(style="display:none")
   div#modalBackground
   div#modalForeground(style="width:50%;height:60%")
-    a.close.fa.fa-close(href="javascript:")
     ul.menu#modalMenu
       li.menu-header Settings
       li.menu-item(data-menu="menuLauncher") Launcher
@@ -12,6 +11,9 @@ div#modal(style="display:none")
       li.menu-hr
       li.menu-item.menu-item-sm(data-menu="menuChangelog") Changelog
       li.menu-item.menu-item-sm(data-menu="menuAbout") About
-    div.content
-      include modals/profile.pug
+    div.container
+      div.content
+        include modals/profile.pug
+      div.buttons
+        button#modalConfirm(href="javascript:") Done
       

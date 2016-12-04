@@ -50,7 +50,7 @@ $(() => {
   // setup modal functions
   let modal = $('#modal');
   function toggleModal() {
-    const dur = 200;
+    const dur = 100;
     if (modal.is(':visible')) {
       modal.velocity({
         opacity: 0
@@ -73,10 +73,10 @@ $(() => {
   function setModalContent(contentID) {
     modalMenu.children().removeClass('active');
     modalMenu.find('[data-menu="' + contentID + '"]').addClass('active');
-    modal.find('#modalForeground > .content').children().hide();
-    modal.find('#modalForeground > .content > #' + contentID).show();
+    modal.find('#modalForeground > .container > .content').children().hide();
+    modal.find('#modalForeground > .container > .content > #' + contentID).show();
   }
-  modal.find('#modalForeground > .close').click(() => {
+  modal.find('#modalForeground #modalConfirm').click(() => {
     toggleModal();
   });
   modal.find('#modalBackground').click(() => {
