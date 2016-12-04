@@ -7,7 +7,8 @@ const {
   SplashScreen }  = require('./windows');
 const path    = require('path'),
       winston = require('winston'),
-      os      = require('os');
+      os      = require('os'),
+      config  = require('nconf');
 
 const pkg = require(path.join(__dirname, '..', 'package.json'));
 
@@ -15,6 +16,19 @@ let splash, launcher, launcherConsole;
 
 app.cwd = __dirname;
 app.pkg = pkg;
+
+config.argv()
+  .env()
+  .file({ file: path.join(__dirname, '..', 'config.json')})
+  .defaults({
+    launcher: {
+      showConsole: false,
+      gameDir: ''
+    }
+  });
+app.on('quit', () => {
+  config.save();
+});
 
 app.logger = new winston.Logger({
   level: 'debug',
