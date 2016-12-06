@@ -134,8 +134,10 @@ $(() => {
   });
 
   // menu settings bindings
-  $('.menu-setting + span').click(function () {
-    $(this).prev().click();
+  $('.menu-setting-switch input').change(function () {
+    win.app.config.set($(this).attr('data-setting'), $(this).prop('checked'));
+  }).each(function () {
+    $(this).prop('checked', !!win.app.config.get($(this).attr('data-setting')));
   });
 
 });

@@ -22,6 +22,7 @@ exports = module.exports = class LauncherWindow extends BrowserWindow {
     });
 
     let self = this;
+    self.app = app;
     self.version = app.pkg.version;
 
     self.loadURL('file://' + path.join(app.cwd, 'launcher.html'));

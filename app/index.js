@@ -29,6 +29,7 @@ config.argv()
 app.on('quit', () => {
   config.save();
 });
+app.config = config;
 
 app.logger = new winston.Logger({
   level: 'debug',
