@@ -1,11 +1,12 @@
 'use strict';
 
 const {app,BrowserWindow} = require('electron');
-const {vsprintf} = require('sprintf-js');
+const {vsprintf} = require('sprintf-js')
 
 const winston = require('winston'),
       path    = require('path'),
-      moment  = require('moment');
+      moment  = require('moment'),
+      config  = require('nconf');
 
 winston.transports.LauncherConsole = class LauncherConsole extends winston.Transport {
   constructor (options = { }) { //eslint-disable-line
@@ -56,8 +57,13 @@ exports = module.exports = class LauncherConsoleWindow extends BrowserWindow {
     let self = this;
     self.loadURL('file://' + path.join(app.cwd, 'console.html'));
 
+    app.updateConsoleVisibility = () => {
+      if (config.get('launcher:showConsole')) self.show();
+      else self.hide();
+    }
+
     self.once('ready-to-show', () => {
-      self.show();
+      app.updateConsoleVisibility();
       app.logger.info('console ready');
     });
   }

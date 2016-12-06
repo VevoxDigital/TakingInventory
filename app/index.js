@@ -100,7 +100,7 @@ app.once('ready', () => {
   launcherConsole = new LauncherConsoleWindow();
   app.logger.transports.launcher.window = launcherConsole;
 
-  launcherConsole.once('show', () => {
+  launcherConsole.once('ready-to-show', () => {
 
     // start running the actual app
     launcher = new LauncherWindow();

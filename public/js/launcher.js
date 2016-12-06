@@ -139,5 +139,8 @@ $(() => {
   }).each(function () {
     $(this).prop('checked', !!win.app.config.get($(this).attr('data-setting')));
   });
+  $('[data-setting="launcher:showConsole"]').change(() => {
+    process.nextTick(win.app.updateConsoleVisibility());
+  });
 
 });
