@@ -99,6 +99,72 @@
             border-bottom: 1px rgba(0,0,0,0.02) solid;
             width: 100%;
           }
+          .menu-setting {
+            display: block;
+            color: $color-light-fg;
+            padding: 5px;
+            &.menu-setting-switch {
+              position: relative;
+              display: inline-block;
+              width: 30px;
+              height: 18px;
+              vertical-align: middle;
+              input {
+                display: none;
+                &:checked + .slider { /*background-color: $color-green - $color-dark-bg;*/ }
+                &:focus + .slider { box-shadow: 0 0 1px $color-green; }
+                &:checked + .slider:before {
+                  transform: translateX(12px);
+                  background-color: $color-green;
+                }
+              }
+              .slider {
+                position: absolute;
+                cursor: pointer;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: $color-dark-bg;
+                border-radius: 9px;
+                transition: 250ms;
+                &:before {
+                  position: absolute;
+                  content: '';
+                  height: 14px;
+                  width: 14px;
+                  left: 2px;
+                  top: 2px;
+                  transition: 250ms;
+                  background-color: $color-light-bg;
+                  border-radius: 50%;
+                }
+              }
+              & + span {
+                font-size: 10pt;
+                padding: 5px;
+                display: inline-block;
+                vertical-align: middle;
+                transition: 250ms;
+                &:hover {
+                  cursor: pointer;
+                  opacity: 0.8;
+                }
+              }
+            }
+            &.menu-setting-text {
+              font-size: 10pt;
+              & + input {
+                border-radius: 5px;
+                border: none;
+                outline: none !important;
+                background-color: rgba(0,0,0,0.05);
+                color: rgba(0,0,0,0.3);
+                margin: 0 5px;
+                padding: 4px;
+              }
+            }
+          }
         }
       }
       .buttons {

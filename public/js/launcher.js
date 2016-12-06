@@ -133,4 +133,9 @@ $(() => {
     setModalContent('menuProfile');
   });
 
+  // menu settings bindings
+  $('.menu-setting + span').click(function () {
+    $(this).prev().click();
+  });
+
 });
