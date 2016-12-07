@@ -352,7 +352,7 @@ exports.versions = () => {
 
       for (const id of files) {
         try {
-          let file = path.join(exports.getGameDirectory(), 'versions', file),
+          let file = path.join(exports.getDir(), 'versions', file),
               stats = fs.statSync(file);
           // ignore non-directories and existing versions
           if (stats.isDirectory() && !versions.versions[id]) {
