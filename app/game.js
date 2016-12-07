@@ -1,10 +1,11 @@
 'use strict';
 
-const path  = require('path'),
-      q     = require('q'),
-      os    = require('os'),
-      fs    = require('fs-extra'),
-      https = require('https');
+const path    = require('path'),
+      q       = require('q'),
+      os      = require('os'),
+      fs      = require('fs-extra'),
+      https   = require('https'),
+      config  = require('nconf');
 
 const {app} = require('electron');
 
@@ -205,6 +206,7 @@ exports.VersionEntry = class VersionEntry {
   * @since 1.0.0
   */
 exports.dir = platform => {
+  if (config.get('launcher:gameDir') !== '') return config.get('launcher:gameDir');
   switch (platform || os.platform()) {
     case 'darwin':
       return path.join(os.homedir(), 'Library', 'Application Support', 'minecraft');
