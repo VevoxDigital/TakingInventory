@@ -24,17 +24,42 @@ class Launcher extends EventEmitter {
 
 let win = remote.getCurrentWindow(), launcher;
 
+let $log = console.log,
+    $warn = console.warn,
+    $error = console.error;
+
+console.log = () => {
+  win.logger.info('ui: ' + arguments.join(' '));
+  return $log.apply(console, arguments);
+}
+console.warn = () => {
+  win.logger.warn('ui: ' + arguments.join(' '));
+  return $warn.apply(console, arguments);
+}
+console.error = () => {
+  win.logger.error('ui: ' + arguments.join(' '));
+  return $error.apply(console, arguments);
+}
+window.onerror((e) => { console.error(e); });
+
+function updateProfileLists() {
+  $('#profile, #menuProfileList').empty();
+  win.config.profileNames.forEach(name => {
+    $('#profile, #menuProfileList').append(`<option value="${name}">${name}</option>`);
+  });
+  $('#profile').val(win.config.profile.name);
+}
+
 win.on('show', () => {
   // populate profiles list and register change events
-  win.config.profileNames.forEach(name => {
-    $('#profile').append(`<option value="${name}">${name}</option>`);
-  });
+  updateProfileLists();
   $('#profile').change(() => {
     win.config.profile = $('#profile').val();
     launcher.emit('profileChanged', win.config.profile);
   });
-  $('#profile').val(win.config.profile.name);
   launcher.emit('profileChanged', win.config.profile);
+  $('#menuLauncher [data-setting="launcher:gameDir"]')
+    .attr('placeholder', win.app.game.dir(null, true));
 });
 
 $(() => {
@@ -98,29 +123,22 @@ $(() => {
 
   // launch button updater and bindings
   function updateLaunchButton(profile) {
+    if (!profile) return;
     let button = $('#launch'),
       primary = button.find('.primary'),
       secondary = button.find('.secondary');
 
     let vername = getFriendlyVersionName(profile.version.id);
-
-    if (profile) {
-      win.logger.info('switched to profile: ' + profile.name);
-      primary.html('Launch Minecraft');
-      secondary.html(profile.name + ' - ' + vername);
-      button.attr('title', 'Ready to Launch Minecraft ' + vername);
-      button.removeAttr('disabled');
-    } else {
-      win.logger.info('switched to no profile');
-      primary.html('Please Wait');
-      secondary.html('Loading profile manifest, just a moment...');
-      button.attr('title', 'Loading...');
-      button.attr('disabled', '');
-    }
+    win.logger.info('switched to profile: ' + profile.name);
+    primary.html('Launch Minecraft');
+    secondary.html(profile.name + ' - ' + vername);
+    button.attr('title', 'Ready to Launch Minecraft ' + vername);
+    button.removeAttr('disabled');
   }
   launcher = new Launcher();
   launcher.on('profileChanged', profile => {
     updateLaunchButton(profile);
+    updateProfileSettingsPage(profile);
   });
 
   // footer and frame button bindings
@@ -131,16 +149,33 @@ $(() => {
   $('#footer .fa.fa-cog').click(() => {
     toggleModal();
     setModalContent('menuProfile');
+    updateProfileSettingsPage(win.config.profiles[$('#profile').val()]);
   });
 
-  // menu settings bindings
-  $('.menu-setting-switch input').change(function () {
+  // menu launcher settings bindings
+  $('#menuLauncher .menu-setting-switch input').change(function () {
     win.app.config.set($(this).attr('data-setting'), $(this).prop('checked'));
   }).each(function () {
     $(this).prop('checked', !!win.app.config.get($(this).attr('data-setting')));
   });
-  $('[data-setting="launcher:showConsole"]').change(() => {
+  $('#menuLauncher [data-setting="launcher:showConsole"]').change(() => {
     process.nextTick(win.app.updateConsoleVisibility());
+  });
+
+  // profile settings bindings
+  function updateProfileSettingsPage(profile) {
+    $('#menuProfileList').val(profile.name);
+    let div = $('#menuProfileSelection');
+
+    div.find('[data-setting="profile:name"]').val(profile.name);
+  }
+  $('#menuProfileList').change(function () {
+    updateProfileSettingsPage(win.config.profiles[$(this).val()]);
+  });
+  $('#menuProfile [data-setting="profile:name"]').blur(function () {
+    win.config.updateProfileName($('#menuProfileList').val(), $(this).val());
+    updateProfileLists();
+    $('#menuProfileList').val($(this).val());
   });
 
 });

@@ -30,18 +30,17 @@ exports = module.exports = class LauncherWindow extends BrowserWindow {
     self.once('ready-to-show', () => {
       this.buildConfig().then(config => {
         app.logger.info(`launcher ready, loaded ${config.numProfiles} profile(s) [format ${config.format}]`);
-        this.config = config;
-        this.show();
+        self.config = config;
+        self.show();
       }).fail((err) => {
         app.logger.error('the launcher could not be initialized');
         app.createCrashDump(err, { phase: 'launch' });
       }).done();
     });
     self.once('close', () => {
-      this.hide();
-      this.config.save().then(() => {
+      self.config.save().then(() => {
         app.quit();
-      });
+      }).catch(app.logger.error).done();
     });
 
     self.logger = app.logger;

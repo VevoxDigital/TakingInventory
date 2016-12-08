@@ -120,6 +120,18 @@ exports.LauncherConfig = class LauncherConfig {
     return this.profiles[this.$profile];
   }
 
+  updateProfileName(oldName, newName) {
+    let profile = this.profiles[oldName];
+    if (!profile) return;
+    profile.name = newName;
+
+    this.profiles[newName] = profile;
+    delete this.profiles[oldName];
+
+    // if current profile is undefined, we must have changed it.
+    if (!this.profile) this.profile = newName;
+  }
+
   get numProfiles() {
     return this.profileNames.length;
   }
@@ -205,8 +217,8 @@ exports.VersionEntry = class VersionEntry {
   * @returns The game directory
   * @since 1.0.0
   */
-exports.dir = platform => {
-  if (config.get('launcher:gameDir') !== '') return config.get('launcher:gameDir');
+exports.dir = (platform, ignoreDefault) => {
+  if (!ignoreDefault && config.get('launcher:gameDir') !== '') return config.get('launcher:gameDir');
   switch (platform || os.platform()) {
     case 'darwin':
       return path.join(os.homedir(), 'Library', 'Application Support', 'minecraft');
@@ -262,8 +274,13 @@ exports.downloadVersions = versionsManifestFile => {
     });
   });
   req.on('error', err => {
-    console.log(err);
+    app.logger.warning('Error downloading version manifest: ' + err.message);
+    app.logger.warning(err.stack);
     deferred.reject(err);
+  });
+  req.setTimeout(5000, () => {
+    app.logger.warning('Timeout when downloading manifest. Assuming there was no update.');
+    deferred.resolve(JSON.parse(fs.readFileSync(versionsManifestFile).toString()));
   });
   req.end();
 
@@ -321,7 +338,13 @@ exports.versionsOffical = () => {
             }
           });
           req.on('error', err => {
+            app.logger.warn('error verifying version manifest: ' + err.message);
+            app.logger.warn(err.stack);
             deferred.reject(err);
+          });
+          req.setTimeout(5000, () => {
+            app.logger.warn('timeout when verifying manifest, assuming there was no update');
+            deferred.resolve(JSON.parse(fs.readFileSync(versionsManifestFile).toString()));
           });
           req.end();
         });
@@ -352,7 +375,7 @@ exports.versions = () => {
 
       for (const id of files) {
         try {
-          let file = path.join(exports.getDir(), 'versions', file),
+          let file = path.join(exports.dir(), 'versions', file),
               stats = fs.statSync(file);
           // ignore non-directories and existing versions
           if (stats.isDirectory() && !versions.versions[id]) {

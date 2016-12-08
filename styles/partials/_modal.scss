@@ -155,13 +155,18 @@
             &.menu-setting-text {
               font-size: 10pt;
               & + input {
-                border-radius: 5px;
                 border: none;
+                border-bottom: 3px rgba(0,0,0,0.2) solid;
+                background-color: transparent;
                 outline: none !important;
-                background-color: rgba(0,0,0,0.05);
-                color: rgba(0,0,0,0.3);
+                color: rgba(0,0,0,0.4);
                 margin: 0 5px;
                 padding: 4px;
+                transition: 250ms;
+                &:hover, &:focus, &:active {
+                  border-color: $color-green;
+                  color: $color-green;
+                }
               }
             }
           }

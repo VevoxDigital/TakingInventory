@@ -9,6 +9,7 @@ const path    = require('path'),
       winston = require('winston'),
       os      = require('os'),
       config  = require('nconf');
+const game = require('./game');
 
 const pkg = require(path.join(__dirname, '..', 'package.json'));
 
@@ -30,6 +31,7 @@ app.on('quit', () => {
   config.save();
 });
 app.config = config;
+app.game = game;
 
 app.logger = new winston.Logger({
   level: 'debug',
@@ -80,6 +82,10 @@ app.createCrashDump = (error, extra) => {
 app.once('window-all-closed', () => {
   app.logger.info('triggered window-all-closed');
   if (process.platform !== 'darwin') app.quit();
+});
+
+app.once('quit', () => {
+  app.logger.info('exiting per software request');
 });
 
 app.once('ready', () => {
