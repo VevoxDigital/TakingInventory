@@ -109,6 +109,8 @@
               width: 30px;
               height: 18px;
               vertical-align: middle;
+              margin-left: 5px;
+              margin-top: 5px;
               input {
                 display: none;
                 &:checked + .slider { /*background-color: $color-green - $color-dark-bg;*/ }
@@ -146,6 +148,7 @@
                 display: inline-block;
                 vertical-align: middle;
                 transition: 250ms;
+                margin-top: 5px;
                 &:hover {
                   cursor: pointer;
                   opacity: 0.8;
@@ -155,6 +158,7 @@
             &.menu-setting-text {
               font-size: 10pt;
               & + input {
+                display: block;
                 border: none;
                 border-bottom: 3px rgba(0,0,0,0.2) solid;
                 background-color: transparent;

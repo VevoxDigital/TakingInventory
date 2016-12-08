@@ -2,5 +2,30 @@ div#menuProfile
   h1.title Game Profiles
   select#menuProfileList
   div#menuProfileSelection
+    //- profile name
     label.menu-setting.menu-setting-text
     input(type="text",data-setting="profile:name")
+    
+    //- profile version
+    
+    
+    //- show experimental versions
+    label.menu-setting.menu-setting-switch
+      input(type="checkbox", data-setting="profile:showExperimental")
+      div.slider
+    span Snapshot Versions
+    br
+    
+    //- show custom versions
+    label.menu-setting.menu-setting-switch
+      input(type="checkbox", data-setting="profile:showCustom")
+      div.slider
+    span Modded Versions
+    br
+    
+    //- show old versions
+    label.menu-setting.menu-setting-switch
+      input(type="checkbox", data-setting="profile:showOld")
+      div.slider
+    span Older Versions
+    br
