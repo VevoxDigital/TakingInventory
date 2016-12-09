@@ -7,25 +7,19 @@ div#menuProfile
     input(type="text",data-setting="profile:name")
     
     //- profile version
-    
+    label.menu-setting.menu-setting-select
+    select#menuProfileVersion(data-setting="profile:version")
     
     //- show experimental versions
     label.menu-setting.menu-setting-switch
-      input(type="checkbox", data-setting="profile:showExperimental")
+      input(type="checkbox", data-setting="profile:useCustom")
       div.slider
-    span Snapshot Versions
+    span Use Modded Versions
     br
     
     //- show custom versions
     label.menu-setting.menu-setting-switch
-      input(type="checkbox", data-setting="profile:showCustom")
+      input(type="checkbox", data-setting="profile:useExperimental")
       div.slider
-    span Modded Versions
-    br
-    
-    //- show old versions
-    label.menu-setting.menu-setting-switch
-      input(type="checkbox", data-setting="profile:showOld")
-      div.slider
-    span Older Versions
+    span Allow Snapshots
     br

@@ -37,18 +37,22 @@ exports.Profile = class Profile {
       this.$version = data.version;
       this.java = data.java;
       this.resolution = data.resolution;
-      this.visibility = data.visibility;
+      this.useCustom = data.useCustom;
+      this.useExperimental = data.userExperimental;
       this.game = data.game;
     } else throw new Error('unknown constructor data');
   }
 
   get version() {
-    if (!this.config.versions) return { };
-    let ver = this.$version || exports.VersionType.RELEASE;
-    return (this.config.versions.latest[ver]
-      ? this.config.versions.versions[this.config.versions.latest[ver]]
-      : this.config.versions.versions[ver]) || { };
+    if (!this.config.versions || this.$version === 'none') return;
+    return this.config.versions.versions[
+      this.$version || this.config.versions.latest[this.useExperimental ? 'snapshot' : 'release']
+    ];
+  }
 
+  set version(ver) {
+    this.$version = ver;
+    if (ver === 'latest') delete this.$version;
   }
 
   serialize() {
@@ -57,7 +61,8 @@ exports.Profile = class Profile {
       version: this.$version,
       java: this.java,
       resolution: this.resolution,
-      visiblity: this.visiblity,
+      useCustom: this.useCustom,
+      useExperimental: this.useExperimental,
       game: this.game
     };
   }

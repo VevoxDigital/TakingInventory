@@ -115,6 +115,7 @@
                 display: none;
                 &:checked + .slider { /*background-color: $color-green - $color-dark-bg;*/ }
                 &:focus + .slider { box-shadow: 0 0 1px $color-green; }
+                &:disabled + .slider { opacity: 0.4; &:hover { cursor: auto; } }
                 &:checked + .slider:before {
                   transform: translateX(12px);
                   background-color: $color-green;
