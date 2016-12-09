@@ -128,7 +128,6 @@
                 right: 0;
                 bottom: 0;
                 background-color: $color-dark-bg;
-                border-radius: 9px;
                 transition: 250ms;
                 &:before {
                   position: absolute;
@@ -139,7 +138,6 @@
                   top: 2px;
                   transition: 250ms;
                   background-color: $color-light-bg;
-                  border-radius: 50%;
                 }
               }
               & + span {
