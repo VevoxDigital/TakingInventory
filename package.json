@@ -1,19 +1,22 @@
 {
   "name": "taking-inventory",
-  "productName": "Taking Inventory",
+  "productName": "TakingInventory",
   "version": "0.1.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "grunt test",
-    "debug": "electron index.js TI_USE_DEBUG=true",
-    "start": "electron index.js",
-    "build": "grunt build"
+    "debug": "grunt build && electron target TI_USE_DEBUG=true",
+    "build": "grunt build && grunt package"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/VevoxDigital/TakingInventory.git"
   },
+  "files": [
+    "engine/",
+    "app/"
+  ],
   "author": "Vevox Digital",
   "license": "GPL-3.0",
   "bugs": {
@@ -22,7 +25,6 @@
   "homepage": "https://github.com/VevoxDigital/TakingInventory#readme",
   "dependencies": {
     "command-exists": "^1.0.2",
-    "electron": "^1.4.15",
     "lodash": "^4.17.4",
     "nconf": "^0.8.4",
     "winston": "^2.3.1"
@@ -30,6 +32,12 @@
   "devDependencies": {
     "electron": "^1.4.15",
     "electron-debug": "^1.1.0",
-    "electron-packager": "^8.5.1"
+    "electron-packager": "^8.5.1",
+    "grunt": "^1.0.1",
+    "grunt-contrib-clean": "^1.0.0",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-symlink": "^1.0.0",
+    "grunt-electron": "^5.0.0",
+    "grunt-shell": "^2.1.0"
   }
 }
