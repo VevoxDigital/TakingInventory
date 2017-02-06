@@ -4,3 +4,6 @@ node_modules/
 # Build files and directories
 target/
 dist/
+
+# Logs
+npm-debug.log
