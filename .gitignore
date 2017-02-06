@@ -1,2 +1,6 @@
 # Package Directories
 node_modules/
+
+# Build files and directories
+target/
+dist/
