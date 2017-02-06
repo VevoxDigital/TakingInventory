@@ -68,10 +68,13 @@ exports = module.exports = grunt => {
           name: '<%= app.productName %>',
           dir: 'target',
           out: 'dist',
-          platform: 'all',
+          platform: 'win32,linux,darwin',
           arch: 'x64',
           asar: true,
-          overwrite: true
+          overwrite: true,
+
+          // darwin specific
+          'app-category-type': 'public.app-category.games'
         }
       }
     }
