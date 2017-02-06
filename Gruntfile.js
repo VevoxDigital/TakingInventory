@@ -61,6 +61,23 @@ exports = module.exports = grunt => {
       }
     },
 
+    // sass style engine
+    sass: {
+      app: {
+        options: {
+          style: 'compressed',
+          loadPath: [ 'app/styles' ]
+        },
+        files: [{
+          expand: true,
+          cwd: 'app',
+          src: 'styles/*.scss',
+          dest: 'target/app',
+          ext: '.css'
+        }]
+      }
+    },
+
     // shell commands
     shell: {
       npm: {
@@ -102,6 +119,7 @@ exports = module.exports = grunt => {
   grunt.loadNpmTasks('grunt-contrib-clean')
   grunt.loadNpmTasks('grunt-contrib-symlink')
   grunt.loadNpmTasks('grunt-contrib-pug')
+  grunt.loadNpmTasks('grunt-contrib-sass')
 
   grunt.loadNpmTasks('grunt-electron')
   grunt.loadNpmTasks('grunt-shell')
@@ -113,7 +131,8 @@ exports = module.exports = grunt => {
     'clean:target',
     'copy:app',
     'copy:engine',
-    'pug:app'
+    'pug:app',
+    'sass:app'
   ])
 
   grunt.registerTask('package', [

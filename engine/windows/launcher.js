@@ -18,7 +18,7 @@ exports = module.exports = class LauncherWindow extends BrowserWindow {
       title: `${app.pkg.productName} v${app.pkg.version}`
     })
 
-    this.loadURL(`file://${path.join(app.appDir, 'views/layout.html')}`)
+    this.loadURL(`file://${path.join(app.appDir, 'views/launcher.html')}`)
 
     this.once('close', () => {
       app.config.save(err => {

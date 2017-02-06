@@ -1,0 +1,23 @@
+.text-left    { text-align: left; }
+.text-right   { text-align: right; }
+.text-center  { text-align: center; }
+
+a {
+  transition: opacity 250ms;
+
+  &:focus,
+  &:hover {
+    color: inherit;
+    opacity: .8;
+    text-decoration: none;
+  }
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+}
