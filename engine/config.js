@@ -8,6 +8,9 @@ const path = require('path')
 require('./globals')
 
 app.dir = app.getPath('userData')
+app.pkg = require('../package.json')
+app.cwd = __dirname
+app.appDir = path.join(app.cwd, '../app')
 
 app.logger.info(`Using ${app.dir} as storage directory`)
 

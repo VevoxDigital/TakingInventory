@@ -43,6 +43,24 @@ exports = module.exports = grunt => {
       tmp: [ 'target/node_modules' ]
     },
 
+    // pug (a.k.a. jade) view engine
+    pug: {
+      app: {
+        options: {
+          data: {
+            app: grunt.file.readJSON('package.json')
+          }
+        },
+        files: [{
+          expand: true,
+          cwd: 'app',
+          src: 'views/**/*.pug',
+          dest: 'target/app',
+          ext: '.html'
+        }]
+      }
+    },
+
     // shell commands
     shell: {
       npm: {
@@ -83,6 +101,7 @@ exports = module.exports = grunt => {
   grunt.loadNpmTasks('grunt-contrib-copy')
   grunt.loadNpmTasks('grunt-contrib-clean')
   grunt.loadNpmTasks('grunt-contrib-symlink')
+  grunt.loadNpmTasks('grunt-contrib-pug')
 
   grunt.loadNpmTasks('grunt-electron')
   grunt.loadNpmTasks('grunt-shell')
@@ -93,7 +112,8 @@ exports = module.exports = grunt => {
   grunt.registerTask('build', [
     'clean:target',
     'copy:app',
-    'copy:engine'
+    'copy:engine',
+    'pug:app'
   ])
 
   grunt.registerTask('package', [

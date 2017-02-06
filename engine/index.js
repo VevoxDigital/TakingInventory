@@ -4,6 +4,9 @@
 
 // electron
 const { app, dialog } = require('electron')
+const { LauncherWindow, SplashWindow } = require('./windows')
+
+require('electron-debug')()
 
 process.on('SIGINT', () => {
   process.stdout.write('\nUser requested stop.\n')
@@ -22,6 +25,9 @@ app.once('quit', () => {
 })
 
 app.once('ready', () => {
+  // open up the Splashscreen
+  app.splash = new SplashWindow()
+
   // perform sanity checks
   app.logger.info('Performing sanity checks...')
 
@@ -69,4 +75,13 @@ app.once('ready', () => {
 
 app.on('ready-sane', () => {
   app.logger.info('All sanity checks passed, app will now start')
+
+  // TODO Splashscreen
+  app.launcher = new LauncherWindow()
+
+  app.launcher.once('ready-to-show', () => {
+    app.splash.close()
+    delete app.splash
+    app.launcher.show()
+  })
 })
