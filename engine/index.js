@@ -14,6 +14,9 @@ process.on('SIGINT', () => {
 app.logger = require('./logger')
 app.logger.info('App init start')
 
+// init configs
+require('./config')
+
 app.once('quit', () => {
   app.logger.info('App closed')
 })
