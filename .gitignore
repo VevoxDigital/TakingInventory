@@ -1,5 +1,6 @@
 node_modules
-/dist
+dist/
+target/
 .sass-cache/
 .tmp/
 config.json
