@@ -1,80 +1,84 @@
-'use strict';
+'use strict'
 
 exports = module.exports = grunt => {
-
   grunt.initConfig({
-    pkg: grunt.file.readJSON('package.json'),
+    app: grunt.file.readJSON('package.json'),
 
-    // copy JS files
     copy: {
-      dist: {
+      build: {
         files: [
-          { expand: true, cwd: 'app/', src: [ '**' ], dest: 'dist/' },
-          { expand: true, cwd: 'public/', src: [ '**' ], dest: 'dist/' },
-          { expand: true, cwd: '.tmp', src: '**/fontawesome*', dest: 'dist/' },
-          { expand: true, cwd: 'node_modules/jquery/dist', src: 'jquery.min.js', dest: 'dist/js' },
-          { expand: true, cwd: 'node_modules/velocity-animsate', src: 'velocity.min.js', dest: 'dist/js' }
+          { expand: true, cwd: 'src', src: [ 'main/**/*.js' ], dest: 'target/' },
+          { expand: true, cwd: 'src', src: [ 'index.js' ], dest: 'target/' }
+        ]
+      },
+      app: {
+        files: [
+          { expand: true, src: 'package.json', dest: 'target/' }
         ]
       }
     },
 
-    // compile pug (i.e. jade) views
-    pug: {
-      dist: {
-        options: {
-          data: {
-            name: '<%= pkg.productName %>',
-            version: '<%= pkg.version %>'
-          }
-        },
-        files: [
-          { expand: true, cwd: 'views/', src: '*.pug', dest: 'dist/', ext: '.html' }
-        ]
-      }
-    },
-
-    // compile sass stylesheets
-    sass: {
-      dist: {
-        options: {
-          style: 'compressed',
-          loadPath: [ 'node_modules', 'styles/partials' ]
-        },
-        files: [{
-          expand: true,
-          cwd: 'styles',
-          src: '*.scss',
-          dest: 'dist/styles',
-          ext: '.css'
-        }]
-      }
-    },
-
-    // download distribution files
-    downloadfile: {
-      files: [
-        { url: 'https://cdn.rawgit.com/FortAwesome/Font-Awesome/master/css/font-awesome.min.css', dest: '.tmp/styles', name: 'fontawesome.css' },
-        { url: 'https://cdn.rawgit.com/FortAwesome/Font-Awesome/master/fonts/fontawesome-webfont.ttf', dest: '.tmp/fonts' },
-        { url: 'https://cdn.rawgit.com/FortAwesome/Font-Awesome/master/fonts/fontawesome-webfont.woff', dest: '.tmp/fonts' },
-        { url: 'https://cdn.rawgit.com/FortAwesome/Font-Awesome/master/fonts/fontawesome-webfont.woff2', dest: '.tmp/fonts' },
-        { url: 'https://cdn.rawgit.com/FortAwesome/Font-Awesome/master/fonts/fontawesome-webfont.svg', dest: '.tmp/fonts' }
-      ]
-    },
-
-    // clean out the dist directory
     clean: {
-      dist: [ 'dist' ]
+      target: [ 'target' ],
+      dist: [ 'dist' ],
+      tmp: [ '.tmp' ]
+    },
+
+    shell: {
+      npm: {
+        command: 'cd target && npm install --production && cd ..'
+      }
+    },
+
+    electron: {
+      all: {
+        options: {
+          name: '<%= app.productName %>',
+          dir: 'target',
+          out: 'dist',
+          platform: 'all',
+          arch: 'all',
+          asar: true,
+          overwrite: true,
+
+          // darwin specific
+          'app-category-type': 'public.app-category.games'
+        }
+      },
+      x64: {
+        options: {
+          name: '<%= app.productName %>',
+          dir: 'target',
+          out: 'dist',
+          platform: 'win32,linux,darwin',
+          arch: 'x64',
+          asar: true,
+          overwrite: true,
+
+          // darwin specific
+          'app-category-type': 'public.app-category.games'
+        }
+      }
     }
 
-  });
+  })
 
-  grunt.loadNpmTasks('grunt-contrib-copy');
-  grunt.loadNpmTasks('grunt-contrib-pug');
-  grunt.loadNpmTasks('grunt-contrib-sass');
-  grunt.loadNpmTasks('grunt-contrib-clean');
-  grunt.loadNpmTasks('grunt-downloadfile');
+  // load tasks
+  grunt.loadNpmTasks('grunt-contrib-copy')
+  grunt.loadNpmTasks('grunt-contrib-clean')
+  grunt.loadNpmTasks('grunt-electron')
+  grunt.loadNpmTasks('grunt-shell')
 
-  grunt.registerTask('default', [ 'dist' ]);
-  grunt.registerTask('dist', [ 'clean:dist', 'copy:dist', 'pug:dist', 'sass:dist' ]);
-
-};
+  // register tasks
+  grunt.registerTask('rebuild', [ 'clean:target', 'build' ])
+  grunt.registerTask('build', [
+    'copy:build',
+    'copy:app'
+  ])
+  grunt.registerTask('package', [
+    'clean:dist',
+    'shell:npm',
+    'electron:x64',
+    'clean:tmp'
+  ])
+}
